@@ -5,6 +5,7 @@
 unsigned int game_is_running = FALSE;
 SDL_Window *myWindow = NULL;
 SDL_Renderer *renderer = NULL;
+int last_frame_time = 0;
 
 unsigned int initialize_SDL_winodw(void){
 
@@ -59,16 +60,29 @@ void process_input(){
 }
 
 void setup(){
-
+    //TODO:
 }
 
 void update(){
-    //TODO:
+    while (!SDL_TICKS_PASSED(SDL_GetTicks(), last_frame_time + FRAME_TARGET_TIME));
+    float delta_time = (SDL_GetTicks() - last_frame_time)/1000.0f;
+    
+    last_frame_time = SDL_GetTicks(); //returns time since SDL Initialization
 }
 
 void render(){
     //TODO:
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    SDL_RenderClear(renderer);
 
+    // Draw game objects here
+        //my edges
+        //my point (light source)
+        //rays from the light source
+
+
+    //present the back buffer
+    SDL_RenderPresent(renderer);
 }
 
 void destroy_window(){
@@ -76,6 +90,8 @@ void destroy_window(){
     SDL_DestroyWindow(myWindow);
     SDL_Quit();
 }
+
+
 int main(int argc, char *argv[]){
     game_is_running = initialize_SDL_winodw();
 
