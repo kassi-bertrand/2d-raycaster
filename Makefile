@@ -1,5 +1,5 @@
 build:
-	gcc -Wall ./src/* -o main -lSDL2
+	gcc -Wall ./src/* -o main -lSDL2 -lm
 
 run:
 	./main
