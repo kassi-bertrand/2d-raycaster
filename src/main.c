@@ -7,7 +7,7 @@
 Point light_source;
 Point mouse_position;
 
-Segment edges[2] = {
+Segment edges[EDGE_NUMBER] = {
     {75, 100, 200, 400},
     {600, 150, 350, 550}
 };
@@ -17,7 +17,7 @@ SDL_Window *myWindow = NULL;
 SDL_Renderer *renderer = NULL;
 int last_frame_time = 0;
 
-
+//shoot an imaginary line, and run intersection point, if any.
 Point cast_Ray(Segment light_Ray, Segment edge){
 /*
     The following algorithm is detailed at:
@@ -60,6 +60,7 @@ Point cast_Ray(Segment light_Ray, Segment edge){
 
 }
 
+//computes the distance between two 2d - point
 float distance(float x1, float y1, float x2, float y2)
 {
     float square_difference_x = (x2 - x1) * (x2 - x1);
@@ -69,11 +70,11 @@ float distance(float x1, float y1, float x2, float y2)
     return value;
 }
 
-void render_Rays (){
+//logic for rendering of light rays
+void render_Rays (float strt_angl, float end_angl){
 
-    for (float degree = 0; degree < 360; degree++){
+    for (float degree = strt_angl; degree < end_angl; degree++){
 
-        Point closest_Point = {NAN, NAN};
         float record = INFINITY;
 
         //convert from "deg" to "rad"
@@ -87,7 +88,7 @@ void render_Rays (){
             (light_source.y) + RAY_LENGTH * sin(radian)
         };
 
-        for (int i = 0; i < 2; i++){
+        for (int i = 0; i < EDGE_NUMBER; i++){
             Point pt = cast_Ray(light_ray, edges[i]);
 
             if (pt.x != NAN && pt.y != NAN){
@@ -101,21 +102,11 @@ void render_Rays (){
             }   
         }
         SDL_RenderDrawLine(renderer, light_ray.x1, light_ray.y1, light_ray.x2, light_ray.y2);
-        /*
-        // if closest point exist
-        if (closest_Point.x != NAN && closest_Point.y != NAN){
-            SDL_RenderDrawLine(renderer, light_ray.x1, light_ray.y1, closest_Point.x, closest_Point.y);
-        }
-        else {
-            // render a ray that is RAY_LENGTH LONG
-            //SDL_RenderDrawLine(renderer, light_ray.x1, light_ray.y1, light_ray.x2, light_ray.y2);
-        }*/
-
     }
 
 }
 
-
+//initialize sdl window
 unsigned int initialize_SDL_winodw(void){
 
     if(SDL_Init(SDL_INIT_EVERYTHING) != 0){
@@ -150,6 +141,7 @@ unsigned int initialize_SDL_winodw(void){
     return TRUE;
 }
 
+//handle inputs
 void process_input(){
     SDL_Event event;
     SDL_PollEvent(&event);
@@ -204,7 +196,7 @@ void render(){
     SDL_SetRenderDrawColor (renderer, 255, 255, 255, 255);
 
         //Render edges
-    for (int i = 0; i < 2; i++){
+    for (int i = 0; i < EDGE_NUMBER; i++){
         SDL_RenderDrawLine(renderer, edges[i].x1, edges[i].y1, edges[i].x2, edges[i].y2);
     }
 
@@ -215,8 +207,8 @@ void render(){
     SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
     SDL_SetRenderDrawColor (renderer, 255, 255, 255, 35);
 
-        //Render each emitted ray from the source
-    render_Rays();
+        //Render each emitted ray from the source, from 0 to 360 deg.
+    render_Rays(0,360);
     //present the back buffer
     SDL_RenderPresent(renderer);
 }

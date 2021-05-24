@@ -7,4 +7,5 @@
 #define FPS 300 //you can play with this value XP
 #define FRAME_TARGET_TIME (1000/FPS) //in ms
 
-#define RAY_LENGTH 400
+#define EDGE_NUMBER 2
+#define RAY_LENGTH 370
