@@ -12,6 +12,12 @@ I was inspired by a video from the Coding Train's YouTube chanel. So, I decided 
 
 CMake and SDL
 
+`Result`:
+
+This is to what the ray caster looks like:
+
+![2D Ray Caster GIF](https://github.com/billy-bertrand/2d-raycaster/blob/master/rayCasterDemo.gif)
+
 `Complications`:
 
 - I got an `undefinied reference` for calling `SDL_Init()` function. The error occured because the linker did not know where to find the actual definition (or implemention) of the function, and "link" it.
@@ -19,12 +25,6 @@ CMake and SDL
 - The `SDL` window, once generated, immedialtely closed. The fix to that was to implement a game loop that would maintain the windown open until some event occured to close it.
 
 - For my first run, I set the frame rate at `30 FPS`. The light source's position was lagging bhid the mouse cursor's position. The reason what that the `update()` function had to wait for "too long" before updating the position of the light source on the screen. So, by increasing the frame rate, I decreased the time `update` had to wait before doing its job. This resulted in *much* more responsive result.
-
-`Result`:
-
-This is to what the ray caster looks like:
-
-![2D Ray Caster GIF](https://github.com/billy-bertrand/2d-raycaster/blob/master/rayCasterDemo.gif)
 
 `Potential Improvements`:
 
